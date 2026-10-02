@@ -17,3 +17,29 @@ export async function loadDemoGraph(): Promise<InvestigationGraph> {
   }
   return response.json();
 }
+
+
+export async function submitDecision(
+  caseId: string,
+  investigationId: string,
+  decision: string,
+  rationale: string,
+  analyst: string
+): Promise<unknown> {
+  const response = await fetch(`${API_BASE}/cases/${caseId}/decisions`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      investigation_id: investigationId,
+      decision,
+      rationale,
+      analyst,
+    }),
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to record human disposition");
+  }
+
+  return response.json();
+}
