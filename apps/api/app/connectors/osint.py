@@ -46,7 +46,7 @@ class DemoOsintConnector:
             PublicProfileRecord(
                 source_type="social",
                 source_ref="fixture://osint/social-001",
-                full_name="Juan M. Castillo",
+                full_name="Alejandro T. Vega",
                 country="CO",
                 city="Bogota",
                 occupation="Content Creator",
