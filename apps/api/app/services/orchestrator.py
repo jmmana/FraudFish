@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
+from typing import Any
 from uuid import UUID
 
 from app.agents.contracts import (
@@ -34,7 +35,11 @@ class InvestigationOrchestrator:
     def registered_agents(self) -> list[str]:
         return [agent.name for agent in self._agents]
 
-    def execute(self, investigation_id: UUID) -> InvestigationRun:
+    def execute(
+        self,
+        investigation_id: UUID,
+        inputs: dict[str, Any] | None = None,
+    ) -> InvestigationRun:
         investigation = case_store.investigations.get(investigation_id)
         if investigation is None:
             raise KeyError("Investigation not found")
@@ -47,6 +52,7 @@ class InvestigationOrchestrator:
             case_id=investigation.case_id,
             investigation_id=investigation.id,
             trace_id=investigation.trace_id,
+            inputs=inputs or {},
         )
 
         results: list[AgentResult] = []
