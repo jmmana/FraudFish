@@ -1,3 +1,4 @@
+import time
 from uuid import uuid4
 
 import pytest
@@ -85,3 +86,34 @@ def test_orchestrator_retries_transient_failure() -> None:
     assert run.status == "succeeded"
     assert agent.calls == 2
     assert run.agent_results[0].metadata["attempts"] == 2
+
+
+class SlowAgent:
+    name = "slow"
+
+    def run(self, context: AgentContext) -> AgentResult:
+        time.sleep(0.05)
+        return AgentResult(
+            agent=self.name,
+            status=AgentStatus.SUCCEEDED,
+            summary="too late",
+        )
+
+
+def test_orchestrator_marks_timeout_as_failed() -> None:
+    case = Case(case_ref=f"CASE-{uuid4()}", title="Timeout test")
+    case_store.cases[case.id] = case
+    investigation = Investigation(case_id=case.id)
+    case_store.investigations[investigation.id] = investigation
+
+    orchestrator = InvestigationOrchestrator(
+        agent_timeout_seconds=0.001,
+        max_attempts=1,
+    )
+    orchestrator.register(SlowAgent())
+
+    run = orchestrator.execute(investigation.id)
+
+    assert run.status == "failed"
+    assert run.agent_results[0].status == "failed"
+    assert "timed out" in (run.agent_results[0].error or "").lower()
