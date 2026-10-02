@@ -18,7 +18,7 @@ def build_demo_investigation_input() -> dict[str, Any]:
     ]
 
     return {
-        "subject_name": "Juan Manuel Castillo Pinto",
+        "subject_name": "Alejandro Torres Vega",
         "subject_country": "CO",
         "subject_city": "Medellin",
         "subject_occupation": "Software Architect",
