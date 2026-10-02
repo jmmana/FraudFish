@@ -16,6 +16,10 @@ router = APIRouter(prefix="/investigations", tags=["investigations"])
 
 class InvestigationRunRequest(BaseModel):
     subject_name: str | None = Field(default=None, max_length=255)
+    subject_country: str | None = Field(default=None, max_length=64)
+    subject_city: str | None = Field(default=None, max_length=128)
+    subject_occupation: str | None = Field(default=None, max_length=255)
+    subject_organization: str | None = Field(default=None, max_length=255)
     transactions: list[dict[str, Any]] = Field(default_factory=list)
 
 
