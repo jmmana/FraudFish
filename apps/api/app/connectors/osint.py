@@ -24,7 +24,7 @@ class DemoOsintConnector:
             PublicProfileRecord(
                 source_type="web",
                 source_ref="fixture://osint/profile-001",
-                full_name="Juan Manuel Castillo Pinto",
+                full_name="Alejandro Torres Vega",
                 country="CO",
                 city="Medellin",
                 occupation="Software Architect",
@@ -35,7 +35,7 @@ class DemoOsintConnector:
             PublicProfileRecord(
                 source_type="news",
                 source_ref="fixture://osint/news-001",
-                full_name="Juan Manuel Castillo Pinto",
+                full_name="Alejandro Torres Vega",
                 country="MX",
                 city="Monterrey",
                 occupation="Business Owner",
