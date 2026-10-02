@@ -1,6 +1,6 @@
 [project]
 name = "fraudfish-api"
-version = "0.1.0"
+version = "0.2.0"
 description = "FraudFish investigation API"
 requires-python = ">=3.12"
 dependencies = [
@@ -8,6 +8,12 @@ dependencies = [
   "uvicorn[standard]>=0.34,<1.0",
   "pydantic>=2.10,<3.0",
   "pydantic-settings>=2.7,<3.0"
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=8.3,<9.0",
+  "httpx>=0.28,<1.0"
 ]
 
 [tool.pytest.ini_options]
