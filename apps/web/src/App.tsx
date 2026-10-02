@@ -13,6 +13,7 @@ const labelForAgent = (agent: string) =>
     aml: "AML",
     device: "Device",
     osint_identity: "OSINT / Identity",
+    adverse_media: "Adverse Media",
     investigator: "Investigator",
   })[agent] ?? agent;
 
@@ -102,6 +103,7 @@ function App() {
               { agent: "aml", status: "queued", summary: "Transaction pattern analysis", signals: [], evidence: [], findings: [], metadata: {} },
               { agent: "device", status: "queued", summary: "Shared-device relationship analysis", signals: [], evidence: [], findings: [], metadata: {} },
               { agent: "osint_identity", status: "queued", summary: "Public-source identity resolution", signals: [], evidence: [], findings: [], metadata: {} },
+              { agent: "adverse_media", status: "queued", summary: "News and adverse-media screening", signals: [], evidence: [], findings: [], metadata: {} },
               { agent: "investigator", status: "queued", summary: "Evidence synthesis and review prioritization", signals: [], evidence: [], findings: [], metadata: {} },
             ] as AgentResult[]).map((agent) => (
               <article className="agent-card" key={agent.agent}>
