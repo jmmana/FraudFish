@@ -23,4 +23,12 @@ def build_demo_investigation_input() -> dict[str, Any]:
         "subject_city": "Medellin",
         "subject_occupation": "Software Architect",
         "transactions": transactions,
+        "device_links": [
+            {"device_ref": "DEV-8732", "identity_ref": "DEMO-PERSON-1"},
+            {"device_ref": "DEV-8732", "identity_ref": "DEMO-PERSON-2"},
+            {"device_ref": "DEV-8732", "identity_ref": "DEMO-PERSON-3"},
+            {"device_ref": "DEV-8732", "identity_ref": "DEMO-PERSON-4"},
+            {"device_ref": "DEV-8732", "identity_ref": "DEMO-PERSON-5"},
+            {"device_ref": "DEV-8732", "identity_ref": "DEMO-PERSON-6"},
+        ],
     }
