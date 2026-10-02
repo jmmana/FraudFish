@@ -2,6 +2,8 @@ import { useEffect, useMemo, useState } from "react";
 import ForceGraph2D from "react-force-graph-2d";
 
 import { loadDemoGraph, runDemo } from "./api";
+import { EvidencePanel } from "./components/EvidencePanel";
+import { HumanDecisionPanel } from "./components/HumanDecisionPanel";
 import type { AgentResult, DemoResponse, GraphNode, InvestigationGraph } from "./types";
 
 const labelForAgent = (agent: string) =>
@@ -146,6 +148,10 @@ function App() {
           </div>
         </aside>
       </section>
+
+      <EvidencePanel agents={demo?.agents ?? []} />
+
+      <HumanDecisionPanel demo={demo} />
 
       <section className="panel graph-panel">
         <div className="panel-title">
