@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from app.agents.contracts import AgentContext, AgentResult, AgentStatus
-from app.connectors.ofac import DemoOfacConnector
+from app.connectors.ofac import DemoOfacConnector, OfacConnector
 from app.services.name_matching import best_name_match
 
 
@@ -10,7 +10,7 @@ class OfacAgent:
 
     def __init__(
         self,
-        connector: DemoOfacConnector | None = None,
+        connector: OfacConnector | None = None,
         fuzzy_threshold: float = 0.90,
     ) -> None:
         self.connector = connector or DemoOfacConnector()
