@@ -44,6 +44,6 @@ def test_demo_investigation_runs_registered_agents() -> None:
     assert run_response.status_code == 200
     payload = run_response.json()
     assert payload["status"] == "succeeded"
-    assert [agent["agent"] for agent in payload["agents"]] == ["ofac", "kyc", "aml", "device", "osint_identity", "adverse_media", "investigator"]
+    assert [agent["agent"] for agent in payload["agents"]] == ["ofac", "kyc", "aml", "device", "osint_identity", "adverse_media", "source_verification", "investigator"]
     assert payload["agents"][0]["metadata"]["positive_match_count"] == 0
     assert len(payload["agents"][2]["signals"]) >= 2
