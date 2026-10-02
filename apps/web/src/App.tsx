@@ -69,7 +69,7 @@ function App() {
         </div>
         <div>
           <span className="muted">SUBJECT</span>
-          <strong>Juan Manuel Castillo Pinto</strong>
+          <strong>Alejandro Torres Vega</strong>
         </div>
         <div>
           <span className="muted">TRANSACTION</span>
