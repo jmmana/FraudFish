@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from collections.abc import Iterable
+import json
 
 from neo4j import Driver, GraphDatabase
 
@@ -31,12 +31,12 @@ class Neo4jGraphRepository:
             MERGE (n:FraudFishEntity {id: $id})
             SET n.type = $type,
                 n.label = $label,
-                n.properties = $properties
+                n.properties_json = $properties_json
             """,
             id=node.id,
             type=node.type.value,
             label=node.label,
-            properties=node.properties,
+            properties_json=json.dumps(node.properties, sort_keys=True),
         )
 
     @staticmethod
@@ -48,14 +48,14 @@ class Neo4jGraphRepository:
             MERGE (source)-[r:RELATED {id: $id}]->(target)
             SET r.type = $type,
                 r.label = $label,
-                r.properties = $properties
+                r.properties_json = $properties_json
             """,
             id=edge.id,
             source=edge.source,
             target=edge.target,
             type=edge.type.value,
             label=edge.label,
-            properties=edge.properties,
+            properties_json=json.dumps(edge.properties, sort_keys=True),
         )
 
     def fetch_graph(self) -> InvestigationGraph:
@@ -63,7 +63,10 @@ class Neo4jGraphRepository:
             node_records = session.run(
                 """
                 MATCH (n:FraudFishEntity)
-                RETURN n.id AS id, n.type AS type, n.label AS label, n.properties AS properties
+                RETURN n.id AS id,
+                       n.type AS type,
+                       n.label AS label,
+                       n.properties_json AS properties_json
                 """
             )
             nodes = [
@@ -71,7 +74,7 @@ class Neo4jGraphRepository:
                     id=record["id"],
                     type=record["type"],
                     label=record["label"],
-                    properties=record["properties"] or {},
+                    properties=json.loads(record["properties_json"] or "{}"),
                 )
                 for record in node_records
             ]
@@ -84,7 +87,7 @@ class Neo4jGraphRepository:
                        target.id AS target,
                        r.type AS type,
                        r.label AS label,
-                       r.properties AS properties
+                       r.properties_json AS properties_json
                 """
             )
             edges = [
@@ -94,7 +97,7 @@ class Neo4jGraphRepository:
                     target=record["target"],
                     type=record["type"],
                     label=record["label"],
-                    properties=record["properties"] or {},
+                    properties=json.loads(record["properties_json"] or "{}"),
                 )
                 for record in edge_records
             ]
