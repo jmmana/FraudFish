@@ -36,7 +36,7 @@ def test_demo_investigation_runs_registered_agents() -> None:
     run_response = client.post(
         f"/investigations/{investigation_id}/run",
         json={
-            "subject_name": "Juan Manuel Castillo Pinto",
+            "subject_name": "Alejandro Torres Vega",
             "transactions": transactions,
         },
     )
