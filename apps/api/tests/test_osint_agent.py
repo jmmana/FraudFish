@@ -10,7 +10,7 @@ def test_osint_agent_returns_candidates_without_confirming_identity() -> None:
         investigation_id=uuid4(),
         trace_id=uuid4(),
         inputs={
-            "subject_name": "Juan Manuel Castillo Pinto",
+            "subject_name": "Alejandro Torres Vega",
             "subject_country": "CO",
             "subject_city": "Medellin",
             "subject_occupation": "Software Architect",
