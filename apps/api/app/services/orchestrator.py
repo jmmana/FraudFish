@@ -48,17 +48,23 @@ class InvestigationOrchestrator:
         if investigation.started_at is None:
             investigation.started_at = datetime.now(timezone.utc)
 
-        context = AgentContext(
-            case_id=investigation.case_id,
-            investigation_id=investigation.id,
-            trace_id=investigation.trace_id,
-            inputs=inputs or {},
-        )
-
+        base_inputs = dict(inputs or {})
         results: list[AgentResult] = []
         failed = False
 
         for agent in self._agents:
+            context_inputs = dict(base_inputs)
+            context_inputs["_prior_agent_results"] = [
+                result.model_dump(mode="json")
+                for result in results
+            ]
+            context = AgentContext(
+                case_id=investigation.case_id,
+                investigation_id=investigation.id,
+                trace_id=investigation.trace_id,
+                inputs=context_inputs,
+            )
+
             try:
                 result = agent.run(context)
             except Exception as exc:
