@@ -4,7 +4,7 @@ from app.services.identity_resolution import IdentityResolutionInput, resolve_ca
 
 def test_identity_resolution_rewards_contextual_matches() -> None:
     subject = IdentityResolutionInput(
-        full_name="Juan Manuel Castillo Pinto",
+        full_name="Alejandro Torres Vega",
         country="CO",
         city="Medellin",
         occupation="Software Architect",
@@ -12,7 +12,7 @@ def test_identity_resolution_rewards_contextual_matches() -> None:
     record = PublicProfileRecord(
         source_type="web",
         source_ref="fixture://match",
-        full_name="Juan Manuel Castillo Pinto",
+        full_name="Alejandro Torres Vega",
         country="CO",
         city="Medellin",
         occupation="Software Architect",
@@ -27,7 +27,7 @@ def test_identity_resolution_rewards_contextual_matches() -> None:
 
 def test_identity_resolution_penalizes_namesake_context_conflicts() -> None:
     subject = IdentityResolutionInput(
-        full_name="Juan Manuel Castillo Pinto",
+        full_name="Alejandro Torres Vega",
         country="CO",
         city="Medellin",
         occupation="Software Architect",
@@ -35,7 +35,7 @@ def test_identity_resolution_penalizes_namesake_context_conflicts() -> None:
     record = PublicProfileRecord(
         source_type="news",
         source_ref="fixture://namesake",
-        full_name="Juan Manuel Castillo Pinto",
+        full_name="Alejandro Torres Vega",
         country="MX",
         city="Monterrey",
         occupation="Business Owner",
