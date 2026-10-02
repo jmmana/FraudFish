@@ -19,7 +19,7 @@ def test_name_normalization_removes_accents_and_punctuation() -> None:
 
 
 def test_ofac_agent_returns_no_match_for_unrelated_name() -> None:
-    result = OfacAgent().run(context("Juan Manuel Castillo Pinto"))
+    result = OfacAgent().run(context("Alejandro Torres Vega"))
 
     assert result.status == "succeeded"
     assert result.metadata["positive_match_count"] == 0
