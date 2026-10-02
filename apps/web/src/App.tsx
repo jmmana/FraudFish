@@ -9,7 +9,9 @@ const labelForAgent = (agent: string) =>
     ofac: "OFAC",
     kyc: "KYC",
     aml: "AML",
+    device: "Device",
     osint_identity: "OSINT / Identity",
+    investigator: "Investigator",
   })[agent] ?? agent;
 
 function App() {
@@ -96,7 +98,9 @@ function App() {
               { agent: "ofac", status: "queued", summary: "Sanctions screening", signals: [], evidence: [], findings: [], metadata: {} },
               { agent: "kyc", status: "queued", summary: "Customer profile consistency", signals: [], evidence: [], findings: [], metadata: {} },
               { agent: "aml", status: "queued", summary: "Transaction pattern analysis", signals: [], evidence: [], findings: [], metadata: {} },
+              { agent: "device", status: "queued", summary: "Shared-device relationship analysis", signals: [], evidence: [], findings: [], metadata: {} },
               { agent: "osint_identity", status: "queued", summary: "Public-source identity resolution", signals: [], evidence: [], findings: [], metadata: {} },
+              { agent: "investigator", status: "queued", summary: "Evidence synthesis and review prioritization", signals: [], evidence: [], findings: [], metadata: {} },
             ] as AgentResult[]).map((agent) => (
               <article className="agent-card" key={agent.agent}>
                 <div className="agent-head">
@@ -114,7 +118,13 @@ function App() {
 
         <aside className="panel risk-panel">
           <span className="muted">CASE ASSESSMENT</span>
-          <div className="risk-score">{demo ? "HIGH" : "—"}</div>
+          <div className="risk-score">
+            {demo
+              ? String(
+                  demo.agents.find((a) => a.agent === "investigator")?.metadata.risk_band ?? "—"
+                ).toUpperCase()
+              : "—"}
+          </div>
           <p>
             FraudFish exposes evidence and hypotheses; the final disposition remains with the analyst.
           </p>
