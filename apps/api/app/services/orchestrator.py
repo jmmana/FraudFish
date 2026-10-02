@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from concurrent.futures import ThreadPoolExecutor, TimeoutError as FutureTimeoutError
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from typing import Any
@@ -24,8 +25,19 @@ class InvestigationRun:
 
 
 class InvestigationOrchestrator:
-    def __init__(self) -> None:
+    def __init__(
+        self,
+        agent_timeout_seconds: float = 15.0,
+        max_attempts: int = 2,
+    ) -> None:
+        if agent_timeout_seconds <= 0:
+            raise ValueError("agent_timeout_seconds must be positive")
+        if max_attempts < 1:
+            raise ValueError("max_attempts must be at least 1")
+
         self._agents: list[InvestigationAgent] = []
+        self.agent_timeout_seconds = agent_timeout_seconds
+        self.max_attempts = max_attempts
 
     def register(self, agent: InvestigationAgent) -> None:
         if any(existing.name == agent.name for existing in self._agents):
@@ -34,6 +46,41 @@ class InvestigationOrchestrator:
 
     def registered_agents(self) -> list[str]:
         return [agent.name for agent in self._agents]
+
+    def _execute_agent(
+        self,
+        agent: InvestigationAgent,
+        context: AgentContext,
+    ) -> AgentResult:
+        last_error: str | None = None
+
+        for attempt in range(1, self.max_attempts + 1):
+            executor = ThreadPoolExecutor(max_workers=1)
+            future = executor.submit(agent.run, context)
+
+            try:
+                result = future.result(timeout=self.agent_timeout_seconds)
+                executor.shutdown(wait=False, cancel_futures=True)
+                result.metadata.setdefault("attempts", attempt)
+                return result
+            except FutureTimeoutError:
+                last_error = (
+                    f"Agent timed out after {self.agent_timeout_seconds} seconds "
+                    f"on attempt {attempt}."
+                )
+                future.cancel()
+                executor.shutdown(wait=False, cancel_futures=True)
+            except Exception as exc:
+                last_error = f"{type(exc).__name__}: {exc}"
+                executor.shutdown(wait=False, cancel_futures=True)
+
+        return AgentResult(
+            agent=agent.name,
+            status=AgentStatus.FAILED,
+            summary="Agent execution failed after bounded retries.",
+            error=last_error,
+            metadata={"attempts": self.max_attempts},
+        )
 
     def execute(
         self,
@@ -65,20 +112,9 @@ class InvestigationOrchestrator:
                 inputs=context_inputs,
             )
 
-            try:
-                result = agent.run(context)
-            except Exception as exc:
-                failed = True
-                result = AgentResult(
-                    agent=agent.name,
-                    status=AgentStatus.FAILED,
-                    summary="Agent execution failed.",
-                    error=str(exc),
-                )
-
+            result = self._execute_agent(agent, context)
             if result.status == AgentStatus.FAILED:
                 failed = True
-
             results.append(result)
 
         investigation.completed_at = datetime.now(timezone.utc)
