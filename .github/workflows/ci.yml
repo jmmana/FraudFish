@@ -61,3 +61,13 @@ jobs:
 
       - name: Validate Docker Compose
         run: docker compose config --quiet
+
+      - name: Start local stack
+        run: docker compose up -d --wait --wait-timeout 90
+
+      - name: Show stack status
+        run: docker compose ps
+
+      - name: Stop local stack
+        if: always()
+        run: docker compose down -v
