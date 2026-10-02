@@ -21,6 +21,7 @@ class InvestigationRunRequest(BaseModel):
     subject_occupation: str | None = Field(default=None, max_length=255)
     subject_organization: str | None = Field(default=None, max_length=255)
     transactions: list[dict[str, Any]] = Field(default_factory=list)
+    device_links: list[dict[str, Any]] = Field(default_factory=list)
 
 
 @router.post(
