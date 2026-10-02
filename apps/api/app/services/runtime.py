@@ -7,6 +7,7 @@ from app.agents.device import DeviceAgent
 from app.agents.investigator import InvestigatorAgent
 from app.agents.ofac import OfacAgent
 from app.agents.osint import OsintIdentityAgent
+from app.agents.source_verification import SourceVerificationAgent
 from app.connectors.news import DemoNewsConnector, GdeltNewsConnector
 from app.connectors.ofac import DemoOfacConnector, OfficialOfacConnector
 from app.services.orchestrator import InvestigationOrchestrator
@@ -32,6 +33,7 @@ def build_orchestrator() -> InvestigationOrchestrator:
     orchestrator.register(DeviceAgent())
     orchestrator.register(OsintIdentityAgent())
     orchestrator.register(build_adverse_media_agent())
+    orchestrator.register(SourceVerificationAgent())
     orchestrator.register(InvestigatorAgent())
     return orchestrator
 
