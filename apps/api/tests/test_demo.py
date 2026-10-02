@@ -17,7 +17,7 @@ def test_demo_runs_end_to_end() -> None:
     assert payload["human_review_required"] is True
 
     agent_names = [agent["agent"] for agent in payload["agents"]]
-    assert agent_names == ["ofac", "kyc", "aml", "device", "osint_identity", "adverse_media", "investigator"]
+    assert agent_names == ["ofac", "kyc", "aml", "device", "osint_identity", "adverse_media", "source_verification", "investigator"]
 
     aml = next(agent for agent in payload["agents"] if agent["agent"] == "aml")
     aml_signal_types = {signal["signal_type"] for signal in aml["signals"]}
