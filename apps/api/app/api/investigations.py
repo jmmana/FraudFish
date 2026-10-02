@@ -1,4 +1,5 @@
 from datetime import datetime, timezone
+from typing import Any
 from uuid import UUID
 
 from fastapi import APIRouter, HTTPException, status
@@ -15,6 +16,7 @@ router = APIRouter(prefix="/investigations", tags=["investigations"])
 
 class InvestigationRunRequest(BaseModel):
     subject_name: str | None = Field(default=None, max_length=255)
+    transactions: list[dict[str, Any]] = Field(default_factory=list)
 
 
 @router.post(
